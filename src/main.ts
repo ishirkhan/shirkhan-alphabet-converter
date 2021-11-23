@@ -1,7 +1,7 @@
 import { u2khan, khan2u, khanText2u } from "./converter";
 
-// console.log(u2khan("شىرخان"));
-// console.log(khan2u("shirkhan"));
+console.log(u2khan("شىرخان"));
+console.log(khan2u("shirkhan"));
 
 const markdown = `
 # shirkhan aylandurghuchi
@@ -9,4 +9,5 @@ const markdown = `
 ## watan watan
 `;
 
+console.log("------------text convert --------------");
 console.log(khanText2u(markdown));
