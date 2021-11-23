@@ -1,4 +1,4 @@
-import table from "shirkhan-alphabet-table";
+import table, { HEMZE } from "shirkhan-alphabet-table";
 import type { ITableItem } from "shirkhan-alphabet-table";
 import { Contract } from "./contract";
 import type { ConvertType } from "./contract";
@@ -28,7 +28,6 @@ export class Base implements Contract {
     Object.entries(this.getMap()).forEach(
       ([key, value]) => (uword = uword.replaceAll(value, key))
     );
-
     return uword;
   }
 
@@ -36,6 +35,10 @@ export class Base implements Contract {
     Object.entries(this.getMap()).forEach(
       ([key, value]) => (word = word.replaceAll(key, value))
     );
-    return word;
+    const volwes = this.table
+      .filter((item) => item.volwes)
+      .map((item) => item.uchar);
+
+    return volwes.includes(word[0]) ? HEMZE + word : word;
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "shirkhan-alphabet-converter",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "files": [
     "dist"
   ],
@@ -34,6 +34,8 @@
     "vite": "^2.6.4"
   },
   "dependencies": {
-    "shirkhan-alphabet-table": "^0.0.x"
+    "retext": "^8.1.0",
+    "shirkhan-alphabet-table": "^0.0.x",
+    "unist-util-visit": "^4.1.0"
   }
 }

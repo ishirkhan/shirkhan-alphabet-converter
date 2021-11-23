@@ -17,4 +17,8 @@ export function khan2u(word: string) {
   return new KhanConverter().forward(word);
 }
 
+export function khanText2u(text: string) {
+  return new KhanConverter().text2u(text);
+}
+
 export { KhanConverter, UlyConverter };
