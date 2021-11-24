@@ -3,6 +3,9 @@ import type { ITableItem } from "shirkhan-alphabet-table";
 import { Contract } from "./contract";
 import type { ConvertType } from "./contract";
 
+import { retext } from "retext";
+import { TextConverter } from "./retext-text-converter";
+
 export class Base implements Contract {
   type!: ConvertType;
   table: ITableItem[];
@@ -40,5 +43,16 @@ export class Base implements Contract {
       .map((item) => item.uchar);
 
     return volwes.includes(word[0]) ? HEMZE + word : word;
+  }
+
+  /**
+   * 基于retext的文本替换母语功能
+   * @param text
+   * @returns
+   */
+  forwardText(text: string) {
+    return retext()
+      .use(TextConverter, (word) => this.forward(word))
+      .processSync(text).value;
   }
 }

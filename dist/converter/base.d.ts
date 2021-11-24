@@ -11,4 +11,10 @@ export declare class Base implements Contract {
     };
     convert(uword: string): string;
     forward(word: string): string;
+    /**
+     * 基于retext的文本替换母语功能
+     * @param text
+     * @returns
+     */
+    forwardText(text: string): import("vfile").VFileValue;
 }

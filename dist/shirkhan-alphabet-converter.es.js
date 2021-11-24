@@ -4,14 +4,14 @@ var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
 };
-const BOUND_FLAG = "'";
+const BOUNDARY_SYMBOL = "|";
 const HEMZE = "\u0626";
 const table = [
   {
     uchar: "\u0626",
     volwes: false,
-    uly: BOUND_FLAG,
-    khan: BOUND_FLAG
+    uly: "'",
+    khan: "'"
   },
   {
     uchar: "\u0627",
@@ -191,7 +191,7 @@ const table = [
     uchar: "\u06BE",
     volwes: false,
     uly: "h",
-    khan: "x"
+    khan: "wh"
   },
   {
     uchar: "\u06CB",
@@ -206,33 +206,6 @@ const table = [
     khan: "y"
   }
 ];
-class Base {
-  constructor() {
-    __publicField(this, "type");
-    __publicField(this, "table");
-    this.table = table;
-  }
-  orderedTable() {
-    return this.table.sort((a, b) => {
-      var _a, _b;
-      return ((_a = b[this.type]) == null ? void 0 : _a.length) - ((_b = a[this.type]) == null ? void 0 : _b.length);
-    });
-  }
-  getMap() {
-    const kvmap = {};
-    this.orderedTable().forEach((item) => kvmap[item[this.type]] = item.uchar);
-    return kvmap;
-  }
-  convert(uword) {
-    Object.entries(this.getMap()).forEach(([key, value]) => uword = uword.replaceAll(value, key));
-    return uword;
-  }
-  forward(word2) {
-    Object.entries(this.getMap()).forEach(([key, value]) => word2 = word2.replaceAll(key, value));
-    const volwes = this.table.filter((item) => item.volwes).map((item) => item.uchar);
-    return volwes.includes(word2[0]) ? HEMZE + word2 : word2;
-  }
-}
 function bail(error) {
   if (error) {
     throw error;
@@ -2173,7 +2146,7 @@ function TextConverter(converter) {
   let stopConvert = false;
   return (tree) => {
     visit(tree, "SentenceNode", (node) => node.children.forEach((childNode) => {
-      if (childNode.type === "SymbolNode" && childNode.value === "|") {
+      if (childNode.type === "SymbolNode" && childNode.value === BOUNDARY_SYMBOL) {
         stopConvert = !stopConvert;
         childNode.value = "";
       }
@@ -2181,13 +2154,40 @@ function TextConverter(converter) {
     }));
   };
 }
+class Base {
+  constructor() {
+    __publicField(this, "type");
+    __publicField(this, "table");
+    this.table = table;
+  }
+  orderedTable() {
+    return this.table.sort((a, b) => {
+      var _a, _b;
+      return ((_a = b[this.type]) == null ? void 0 : _a.length) - ((_b = a[this.type]) == null ? void 0 : _b.length);
+    });
+  }
+  getMap() {
+    const kvmap = {};
+    this.orderedTable().forEach((item) => kvmap[item[this.type]] = item.uchar);
+    return kvmap;
+  }
+  convert(uword) {
+    Object.entries(this.getMap()).forEach(([key, value]) => uword = uword.replaceAll(value, key));
+    return uword;
+  }
+  forward(word2) {
+    Object.entries(this.getMap()).forEach(([key, value]) => word2 = word2.replaceAll(key, value));
+    const volwes = this.table.filter((item) => item.volwes).map((item) => item.uchar);
+    return volwes.includes(word2[0]) ? HEMZE + word2 : word2;
+  }
+  forwardText(text) {
+    return retext().use(TextConverter, (word2) => this.forward(word2)).processSync(text).value;
+  }
+}
 class Khan extends Base {
   constructor() {
     super(...arguments);
     __publicField(this, "type", "khan");
-  }
-  text2u(text) {
-    return retext().use(TextConverter, (word2) => this.forward(word2)).processSync(text).value;
   }
 }
 class Uly extends Base {
@@ -2209,6 +2209,6 @@ function khan2u(word2) {
   return new Khan().forward(word2);
 }
 function khanText2u(text) {
-  return new Khan().text2u(text);
+  return new Khan().forwardText(text);
 }
 export { Khan as KhanConverter, Uly as UlyConverter, khan2u, khanText2u, u2khan, u2uly, uly2u };

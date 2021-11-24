@@ -1,5 +1,7 @@
 import { visit } from "unist-util-visit";
 
+import { BOUNDARY_SYMBOL } from "shirkhan-alphabet-table";
+
 export interface Node {
   value: string;
   type: string;
@@ -25,7 +27,10 @@ export function TextConverter(converter?: convertCallback) {
   return (tree: any) => {
     visit(tree, "SentenceNode", (node: Node) =>
       node.children.forEach((childNode) => {
-        if (childNode.type === "SymbolNode" && childNode.value === "|") {
+        if (
+          childNode.type === "SymbolNode" &&
+          childNode.value === BOUNDARY_SYMBOL
+        ) {
           // 切换终止状态
           stopConvert = !stopConvert;
           childNode.value = "";
