@@ -2132,12 +2132,43 @@ const visit = function(tree, test, visitor, reverse) {
     return visitor(node, parent ? parent.children.indexOf(node) : null, parent);
   }
 };
+function handlePunctuationNode(node) {
+  if (node.type !== "PunctuationNode")
+    return node;
+  switch (node.value) {
+    case "'":
+      node.value = "";
+      break;
+    case "?":
+      node.value = "\u061F";
+      break;
+    case "\uFF1F":
+      node.value = "\u061F";
+      break;
+    case ",":
+      node.value = "\u060C";
+      break;
+    case "\uFF0C":
+      node.value = "\u060C";
+      break;
+    case "(":
+      node.value = "(";
+      break;
+    case ")":
+      node.value = ")";
+      break;
+  }
+  return node;
+}
 function convertNode(node, converter) {
+  var _a;
   if (node.type === "WhiteSpaceNod")
     return node;
+  handlePunctuationNode(node);
   if (node.type !== "WordNode")
     return node;
-  node.children.forEach((childNode) => {
+  (_a = node.children) == null ? void 0 : _a.forEach((childNode) => {
+    handlePunctuationNode(childNode);
     childNode.value = converter ? converter(childNode.value) : childNode.value;
   });
   return node;
@@ -2145,13 +2176,15 @@ function convertNode(node, converter) {
 function TextConverter(converter) {
   let stopConvert = false;
   return (tree) => {
-    visit(tree, "SentenceNode", (node) => node.children.forEach((childNode) => {
-      if (childNode.type === "SymbolNode" && childNode.value === BOUNDARY_SYMBOL) {
-        stopConvert = !stopConvert;
-        childNode.value = "";
-      }
-      stopConvert || convertNode(childNode, converter);
-    }));
+    visit(tree, "SentenceNode", (node) => {
+      return node.children.forEach((childNode) => {
+        if (childNode.type === "SymbolNode" && childNode.value === BOUNDARY_SYMBOL) {
+          stopConvert = !stopConvert;
+          childNode.value = "";
+        }
+        stopConvert || convertNode(childNode, converter);
+      });
+    });
   };
 }
 class Base {
