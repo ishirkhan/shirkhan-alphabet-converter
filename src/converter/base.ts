@@ -5,6 +5,7 @@ import type { ConvertType } from "./contract";
 
 import { retext } from "retext";
 import { TextConverter } from "./retext-text-converter";
+import { replaceAll } from "./util";
 
 export class Base implements Contract {
   type!: ConvertType;
@@ -29,14 +30,14 @@ export class Base implements Contract {
 
   convert(uword: string): string {
     Object.entries(this.getMap()).forEach(
-      ([key, value]) => (uword = uword.replaceAll(value, key))
+      ([key, value]) => (uword = replaceAll(uword, value, key))
     );
     return uword;
   }
 
   forward(word: string): string {
     Object.entries(this.getMap()).forEach(
-      ([key, value]) => (word = word.replaceAll(key, value))
+      ([key, value]) => (word = replaceAll(word, key, value))
     );
     const volwes = this.table
       .filter((item) => item.volwes)

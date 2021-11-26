@@ -2187,6 +2187,9 @@ function TextConverter(converter) {
     });
   };
 }
+function replaceAll(str, target, replacement) {
+  return str.replace(new RegExp(target, "ig"), replacement);
+}
 class Base {
   constructor() {
     __publicField(this, "type");
@@ -2205,11 +2208,11 @@ class Base {
     return kvmap;
   }
   convert(uword) {
-    Object.entries(this.getMap()).forEach(([key, value]) => uword = uword.replaceAll(value, key));
+    Object.entries(this.getMap()).forEach(([key, value]) => uword = replaceAll(uword, value, key));
     return uword;
   }
   forward(word2) {
-    Object.entries(this.getMap()).forEach(([key, value]) => word2 = word2.replaceAll(key, value));
+    Object.entries(this.getMap()).forEach(([key, value]) => word2 = replaceAll(word2, key, value));
     const volwes = this.table.filter((item) => item.volwes).map((item) => item.uchar);
     return volwes.includes(word2[0]) ? HEMZE + word2 : word2;
   }
