@@ -86,6 +86,7 @@ function handleChildrenNode(node: Node, converter: convertCallback) {
 }
 
 export function TextConverter(converter: convertCallback) {
+  stopConvert = false;
   return (tree: any) => {
     visit(tree, "SentenceNode", (node: Node) => {
       handleChildrenNode(node, converter);

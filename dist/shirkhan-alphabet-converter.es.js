@@ -2155,6 +2155,7 @@ function handleChildrenNode(node, converter) {
   return node;
 }
 function TextConverter(converter) {
+  stopConvert = false;
   return (tree) => {
     visit(tree, "SentenceNode", (node) => {
       handleChildrenNode(node, converter);
