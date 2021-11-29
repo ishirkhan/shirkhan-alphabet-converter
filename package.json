@@ -1,6 +1,6 @@
 {
   "name": "shirkhan-alphabet-converter",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "files": [
     "dist"
   ],
@@ -14,6 +14,7 @@
   },
   "scripts": {
     "start": "vite",
+    "prebuild": "yarn test",
     "build": "tsc && vite build",
     "postbuild": "tsc",
     "test": "jest --config=jest.config.js"

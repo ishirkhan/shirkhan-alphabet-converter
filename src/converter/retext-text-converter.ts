@@ -10,70 +10,85 @@ export interface Node {
 
 export type convertCallback = (nodeValue: string) => string;
 
-function handlePunctuationNode(node: Node) {
-  if (node.type !== "PunctuationNode") return node;
+// function handlePunctuationNode(node: Node) {
+//   if (node.type !== "PunctuationNode") return node;
 
-  switch (node.value) {
-    case "'": // 处理hemze 默认因单词首字母带hemze，这里去掉字符就能达到加hemze的效果
-      node.value = "";
-      break;
-    case "?":
-      node.value = "؟";
-      break;
-    case "？":
-      node.value = "؟";
-      break;
-    case ",":
-      node.value = "،";
-      break;
-    case "，":
-      node.value = "،";
-      break;
-    case "(":
-      node.value = "(";
-      break;
-    case ")":
-      node.value = ")";
-      break;
-    default:
-      break;
+//   switch (node.value) {
+//     case "'": // 处理hemze 默认因单词首字母带hemze，这里去掉字符就能达到加hemze的效果
+//       node.value = "";
+//       break;
+//     case "?":
+//       node.value = "؟";
+//       break;
+//     case "？":
+//       node.value = "؟";
+//       break;
+//     case ",":
+//       node.value = "،";
+//       break;
+//     case "，":
+//       node.value = "،";
+//       break;
+//     case "(":
+//       node.value = "(";
+//       break;
+//     case ")":
+//       node.value = ")";
+//       break;
+//     default:
+//       break;
+//   }
+//   return node;
+// }
+
+// function convertNode(node: Node, converter?: convertCallback) {
+//   if (node.type === "WhiteSpaceNod") return node;
+
+//   // handlePunctuationNode(node);
+
+//   if (node.type !== "WordNode") return node;
+
+//   node.children?.forEach((childNode) => {
+//     // handlePunctuationNode(childNode);
+//     childNode.value = converter ? converter(childNode.value) : childNode.value;
+//   });
+
+//   return node;
+// }
+
+let stopConvert = false;
+
+function handleBoundaryNode(node: Node) {
+  // 切换终止状态
+  if (node.type === "PunctuationNode" && node.value === BOUNDARY_SYMBOL) {
+    stopConvert = !stopConvert;
+    node.value = "";
   }
-  return node;
 }
 
-function convertNode(node: Node, converter?: convertCallback) {
-  if (node.type === "WhiteSpaceNod") return node;
+function handleChildrenNode(node: Node, converter: convertCallback) {
+  if (node.type === "WhiteSpaceNode") return node; // 空白不处理
+  if (node.type === "PunctuationNode") handleBoundaryNode(node); // 分界符
 
-  handlePunctuationNode(node);
+  // 有value 而且需要转移的部分
+  if (!stopConvert && node?.value) {
+    node.value = converter(node.value);
+  }
 
-  if (node.type !== "WordNode") return node;
+  // 没有孩子
+  if (!node?.children) return node;
 
-  node.children?.forEach((childNode) => {
-    handlePunctuationNode(childNode);
-    childNode.value = converter ? converter(childNode.value) : childNode.value;
+  node.children.forEach((childNode) => {
+    handleChildrenNode(childNode, converter);
   });
 
   return node;
 }
 
-export function TextConverter(converter?: convertCallback) {
-  // 当遇到终止符时停止转换
-  let stopConvert = false;
-
+export function TextConverter(converter: convertCallback) {
   return (tree: any) => {
     visit(tree, "SentenceNode", (node: Node) => {
-      return node.children.forEach((childNode) => {
-        if (
-          childNode.type === "SymbolNode" &&
-          childNode.value === BOUNDARY_SYMBOL
-        ) {
-          // 切换终止状态
-          stopConvert = !stopConvert;
-          childNode.value = "";
-        }
-
-        stopConvert || convertNode(childNode, converter);
-      });
+      handleChildrenNode(node, converter);
     });
   };
 }

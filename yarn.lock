@@ -3356,9 +3356,9 @@ shebang-regex@^3.0.0:
   integrity sha1-rhbxZE2HPsrYQ7AwexQzYtTEIXI=
 
 shirkhan-alphabet-table@^0.0.x:
-  version "0.0.4"
-  resolved "https://registry.npmjs.org/shirkhan-alphabet-table/-/shirkhan-alphabet-table-0.0.4.tgz#07f332ef90087ecbc48d15095a506a816c91837b"
-  integrity sha512-xdmxgXSGywJ4Sa9WEcuDHN38Ds85nYJiR29HPsa7z9kXlIcfPvXUODG8CHh2eYJlmLssgEm8cVkfx+nBjUpbnw==
+  version "0.0.5"
+  resolved "https://registry.npmjs.org/shirkhan-alphabet-table/-/shirkhan-alphabet-table-0.0.5.tgz#000e687280f38980bacb4530d3ac182a28b42d51"
+  integrity sha512-y+yATZkibIKEZWdih4Fray+xAqJtmNLEy3nf86qqNKCLS5R6WN6aPs64YlRSR3f9AwLVNgSN2/vwVzjt9zXyRg==
 
 signal-exit@^3.0.2, signal-exit@^3.0.3:
   version "3.0.5"

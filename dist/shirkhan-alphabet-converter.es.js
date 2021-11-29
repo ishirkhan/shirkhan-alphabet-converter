@@ -4,7 +4,7 @@ var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
 };
-const BOUNDARY_SYMBOL = "|";
+const BOUNDARY_SYMBOL = "/";
 const HEMZE = "\u0626";
 const table = [
   {
@@ -2132,58 +2132,32 @@ const visit = function(tree, test, visitor, reverse) {
     return visitor(node, parent ? parent.children.indexOf(node) : null, parent);
   }
 };
-function handlePunctuationNode(node) {
-  if (node.type !== "PunctuationNode")
-    return node;
-  switch (node.value) {
-    case "'":
-      node.value = "";
-      break;
-    case "?":
-      node.value = "\u061F";
-      break;
-    case "\uFF1F":
-      node.value = "\u061F";
-      break;
-    case ",":
-      node.value = "\u060C";
-      break;
-    case "\uFF0C":
-      node.value = "\u060C";
-      break;
-    case "(":
-      node.value = "(";
-      break;
-    case ")":
-      node.value = ")";
-      break;
+let stopConvert = false;
+function handleBoundaryNode(node) {
+  if (node.type === "PunctuationNode" && node.value === BOUNDARY_SYMBOL) {
+    stopConvert = !stopConvert;
+    node.value = "";
   }
-  return node;
 }
-function convertNode(node, converter) {
-  var _a;
-  if (node.type === "WhiteSpaceNod")
+function handleChildrenNode(node, converter) {
+  if (node.type === "WhiteSpaceNode")
     return node;
-  handlePunctuationNode(node);
-  if (node.type !== "WordNode")
+  if (node.type === "PunctuationNode")
+    handleBoundaryNode(node);
+  if (!stopConvert && (node == null ? void 0 : node.value)) {
+    node.value = converter(node.value);
+  }
+  if (!(node == null ? void 0 : node.children))
     return node;
-  (_a = node.children) == null ? void 0 : _a.forEach((childNode) => {
-    handlePunctuationNode(childNode);
-    childNode.value = converter ? converter(childNode.value) : childNode.value;
+  node.children.forEach((childNode) => {
+    handleChildrenNode(childNode, converter);
   });
   return node;
 }
 function TextConverter(converter) {
-  let stopConvert = false;
   return (tree) => {
     visit(tree, "SentenceNode", (node) => {
-      return node.children.forEach((childNode) => {
-        if (childNode.type === "SymbolNode" && childNode.value === BOUNDARY_SYMBOL) {
-          stopConvert = !stopConvert;
-          childNode.value = "";
-        }
-        stopConvert || convertNode(childNode, converter);
-      });
+      handleChildrenNode(node, converter);
     });
   };
 }

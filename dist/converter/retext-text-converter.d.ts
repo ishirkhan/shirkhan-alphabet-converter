@@ -4,4 +4,4 @@ export interface Node {
     children: Node[];
 }
 export declare type convertCallback = (nodeValue: string) => string;
-export declare function TextConverter(converter?: convertCallback): (tree: any) => void;
+export declare function TextConverter(converter: convertCallback): (tree: any) => void;

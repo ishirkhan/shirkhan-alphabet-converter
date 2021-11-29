@@ -53,7 +53,7 @@ export class Base implements Contract {
    */
   forwardText(text: string) {
     return retext()
-      .use(TextConverter, (word) => this.forward(word))
+      .use(TextConverter as any, (word: string) => this.forward(word))
       .processSync(text).value;
   }
 }

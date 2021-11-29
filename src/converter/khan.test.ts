@@ -22,7 +22,7 @@ describe("测试 khan 转换功能", () => {
 
   test("khan test 换回功能测试", () => {
     const markdown =
-      "shirkhan isil |bu katak ichidiki mezmun czpeti saqlinidu 你好|";
+      "shirkhan isil /bu katak ichidiki mezmun czpeti saqlinidu 你好/";
     const res = khan.forwardText(markdown);
     expect(res).toEqual(
       "شىرخان ئىسىل bu katak ichidiki mezmun czpeti saqlinidu 你好"
