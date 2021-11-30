@@ -1,21 +1,19 @@
 import { u2khan, khan2u, khanText2u } from "./converter";
+import { marked } from "marked";
 
 console.log(u2khan("شىرخان"));
 console.log(khan2u("shirkhan"));
 
-const markdown = `
-# shirkhan isil
-- isil
-  - isil tu
+// console.log(khanText2u(markdown));
+function showMarkdown(markdown: string) {
+  markdown = khanText2u(markdown).toString();
+  document.getElementById("result")!.innerHTML = marked.parse(markdown);
+}
 
-/
-Column A | Column B | Column C
----------|----------|---------
- /A1/ | B1 | C1
- A2 | B2 | C2
- A3 | /B3/ | C3
-/
-`;
+const markdownTextArea = document.getElementById("test") as HTMLTextAreaElement;
 
-console.log("------------text convert --------------");
-console.log(khanText2u(markdown));
+showMarkdown(markdownTextArea.value);
+
+markdownTextArea.addEventListener("input", (e: any) =>
+  showMarkdown(e.target.value)
+);

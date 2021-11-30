@@ -1207,6 +1207,11 @@
     jest-diff "^27.0.0"
     pretty-format "^27.0.0"
 
+"@types/marked@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.npmmirror.com/@types/marked/download/@types/marked-4.0.1.tgz?cache=0&sync_timestamp=1637197389926&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40types%2Fmarked%2Fdownload%2F%40types%2Fmarked-4.0.1.tgz#d588a7bbc4d6551c5e75249bc106ffda96ae33c5"
+  integrity sha512-ZigEmCWdNUU7IjZEuQ/iaimYdDHWHfTe3kg8ORfKjyGYd9RWumPoOJRQXB0bO+XLkNwzCthW3wUIQtANaEZ1ag==
+
 "@types/nlcst@^1.0.0":
   version "1.0.0"
   resolved "https://registry.npmmirror.com/@types/nlcst/download/@types/nlcst-1.0.0.tgz#9dacd7e9a32bcf0451873be62bdc373aed735b46"
@@ -2911,6 +2916,11 @@ makeerror@1.0.12:
   integrity sha1-Pl3SB5qC6BLpg8xmEMSiyw6qgBo=
   dependencies:
     tmpl "1.0.5"
+
+marked@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.npmmirror.com/marked/download/marked-4.0.5.tgz#85f46937f6a4616de7cbe0e1433e1640c320c729"
+  integrity sha512-eUToMA5d5lunnipkCN7zFD0RiunCF2Uo6bImEt/Qx8LZMW7oPXTw7R+f+M5V3eS7164HjEDPfW8/TrefuFhDfw==
 
 merge-stream@^2.0.0:
   version "2.0.0"

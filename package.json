@@ -13,7 +13,7 @@
     }
   },
   "scripts": {
-    "start": "vite",
+    "start": "rm -rf node_modules/.vite && vite",
     "prebuild": "yarn test",
     "build": "tsc && vite build",
     "postbuild": "tsc",
@@ -31,11 +31,13 @@
     "core-js": "3",
     "corejs": "^1.0.0",
     "jest": "^27.3.1",
+    "marked": "^4.0.5",
     "typescript": "^4.3.2",
-    "vite": "^2.6.4"
+    "vite": "^2.6.4",
+    "@types/marked": "^4.0.1",
+    "babel-plugin-transform-class-properties": "^6.24.1"
   },
   "dependencies": {
-    "babel-plugin-transform-class-properties": "^6.24.1",
     "retext": "^8.1.0",
     "shirkhan-alphabet-table": "^0.0.x",
     "unist-util-visit": "^4.1.0"
