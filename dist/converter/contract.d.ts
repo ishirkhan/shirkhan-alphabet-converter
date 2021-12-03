@@ -1,5 +1,5 @@
-import type { ITableItem } from "shirkhan-alphabet-table";
-export declare type ConvertType = keyof Pick<ITableItem, "khan" | "uchar" | "uly">;
+import type { ITableItem } from "./types";
+export declare type ConvertType = keyof Pick<ITableItem, "khan" | "ug" | "uly">;
 export interface Contract {
     type: ConvertType;
     table: ITableItem[];
@@ -20,10 +20,16 @@ export interface Contract {
      * 吧母语内容转换成当前主导的形式
      * @param uword
      */
-    convert(uword: string): string;
+    fromUg(uword: string): string;
     /**
      * 当前主导形式的内容转换成母语
      * @param word
      */
-    forward(word: string): string;
+    toUg(word: string): string;
+    /**
+     * 基于retext的文本替换母语功能
+     * @param text
+     * @returns
+     */
+    toUgText(text: string): string;
 }

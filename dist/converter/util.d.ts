@@ -1,3 +1,4 @@
+export declare function escapeSpecialCharacters(specialChars: string): string;
 /**
  * 给定字符串中的指定字符串替换成其他串
  * @param str 内容

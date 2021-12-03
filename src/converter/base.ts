@@ -1,5 +1,4 @@
-import table, { HEMZE } from "shirkhan-alphabet-table";
-import type { ITableItem } from "shirkhan-alphabet-table";
+import type { ITableItem } from "./types";
 import { Contract } from "./contract";
 import type { ConvertType } from "./contract";
 
@@ -9,10 +8,7 @@ import { replaceAll } from "./util";
 
 export class Base implements Contract {
   type!: ConvertType;
-  table: ITableItem[];
-  constructor() {
-    this.table = table;
-  }
+  constructor(public table: ITableItem[], public hemze = "x") {}
 
   orderedTable(): ITableItem[] {
     return this.table.sort(
@@ -28,14 +24,14 @@ export class Base implements Contract {
     return kvmap;
   }
 
-  convert(uword: string): string {
+  fromUg(uword: string): string {
     Object.entries(this.getMap()).forEach(
       ([key, value]) => (uword = replaceAll(uword, value, key))
     );
     return uword;
   }
 
-  forward(word: string): string {
+  toUg(word: string): string {
     Object.entries(this.getMap()).forEach(
       ([key, value]) => (word = replaceAll(word, key, value))
     );
@@ -43,7 +39,7 @@ export class Base implements Contract {
       .filter((item) => item.volwes)
       .map((item) => item.uchar);
 
-    return volwes.includes(word[0]) ? HEMZE + word : word;
+    return volwes.includes(word[0]) ? this.hemze + word : word;
   }
 
   /**
@@ -51,9 +47,10 @@ export class Base implements Contract {
    * @param text
    * @returns
    */
-  forwardText(text: string) {
+  toUgText(text: string) {
     return retext()
-      .use(TextConverter as any, (word: string) => this.forward(word))
-      .processSync(text).value;
+      .use(TextConverter as any, (word: string) => this.toUg(word))
+      .processSync(text)
+      .value.toString();
   }
 }
